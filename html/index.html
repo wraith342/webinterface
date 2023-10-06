@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shinji AT Webinterface</title>
+    <link rel="stylesheet" href="./style.css">
+</head>
+
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100;300&display=swap');
+
+    body {
+        background-color: gray;
+        font-family: "Roboto";
+    }
+
+    .button {
+        display: inline-block;
+        border-radius: 4px;
+        background-color: rgb(80, 255, 80);
+        border: none;
+        color: #FFFFFF;
+        text-align: center;
+        font-size: 28px;
+        padding: 20px;
+        width: 200px;
+        transition: all 0.5s;
+        cursor: pointer;
+        margin: 5px;
+    }
+
+    .button span {
+        cursor: pointer;
+        display: inline-block;
+        position: relative;
+        transition: 0.5s;
+    }
+
+    .button span:after {
+        content: '\00bb';
+        position: absolute;
+        opacity: 0;
+        top: 0;
+        right: -20px;
+        transition: 0.5s;
+    }
+
+    .button:hover span {
+        padding-right: 25px;
+    }
+
+    .button:hover span:after {
+        opacity: 1;
+        right: 0;
+    }
+
+</style>
+
+<body>
+    <center>
+        <h1>Shinji AT Webinterface</h1>
+    </center>
+    <center>
+        <div id="buttons">
+            <button class="button" style="vertical-align:middle" id="shutdown"><span>Shutdown </span></button>
+            <button class="button" style="vertical-align:middle" id="reboot"><span>Reboot </span></button>
+        </div>
+    </center>
+</body>
+
+<script>
+    document.getElementById("shutdown").addEventListener("click", () => {
+        const xhr = new XMLHttpRequest();
+        xhr.open("GET", "http://localhost:3333/api/shutdown/1/0", true);
+        xhr.onreadystatechange = () => {
+            if (xhr.readyState === 4) {
+                if (xhr.status === 200) {
+                    const data = JSON.parse(xhr.responseText);
+                    console.log(data);
+                } else {
+                    console.error("error:", xhr.status, xhr.statusText);
+                }
+            }
+        };
+        xhr.send();
+    });
+
+    document.getElementById("reboot").addEventListener("click", () => {
+        const xhr = new XMLHttpRequest();
+        xhr.open("GET", "http://localhost:3333/api/reboot/0/1", true);
+        xhr.onreadystatechange = () => {
+            if (xhr.readyState === 4) {
+                if (xhr.status === 200) {
+                    const data = JSON.parse(xhr.responseText);
+                    console.log(data);
+                } else {
+                    console.error("error:", xhr.status, xhr.statusText);
+                }
+            }
+        };
+        xhr.send();
+    });
+</script>
+
+</html>

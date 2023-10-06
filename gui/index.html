@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Shinji Web Interface</title>
+  <link rel="stylesheet" href="./style.css">
+</head>
+
+<script>
+  // Schritt 1: JSON-Datei laden
+  fetch('../cfg/api.json')
+    .then(response => response.json())
+    .then(data => {
+      // Schritt 2: JSON-Wert in HTML einfügen
+      const outputDiv = document.getElementById('apiport');
+      outputDiv.textContent = "JSON API-Port: " + data.port; // "key" durch den entsprechenden JSON-Schlüssel ersetzen
+    })
+    .catch(error => console.error('Error loading the JSON-API File:', error));
+</script>
+
+<script>
+  // Schritt 1: JSON-Datei laden
+  fetch('../cfg/main.json')
+    .then(response => response.json())
+    .then(data => {
+      // Schritt 2: JSON-Wert in HTML einfügen
+      const outputDiv = document.getElementById('htmlport');
+      outputDiv.textContent = "Web Interface Port: " + data.webserverport; // "key" durch den entsprechenden JSON-Schlüssel ersetzen
+    })
+    .catch(error => console.error('Error loading the JSON-API File: ', error));
+</script>
+
+<script>
+    const xhr = new XMLHttpRequest();
+    xhr.open('GET', 'http://localhost:3333/api/electronwindow/0/0', true);
+    
+    xhr.onload = function () {
+        if (xhr.status >= 200 && xhr.status < 300) {
+            const response = JSON.parse(xhr.responseText);
+            const h1Element = document.getElementById('api');
+            h1Element.textContent = response ? 'API: Online' : 'API: Offline';
+            h1Element.style = response ? "color: #42f58d;" : "color: #ff2450;";
+            console.log(response)
+        } else {
+            console.error('Request failed with status:', xhr.status);
+        }
+    };
+    
+    xhr.onerror = function () {
+        console.error('Request error');
+    };
+    
+    xhr.send();
+</script>
+
+<script>
+  const xhr1 = new XMLHttpRequest();
+  xhr1.open('GET', 'http://localhost/', true);
+  
+  xhr1.onload = function () {
+      if (xhr.status >= 200 && xhr.status < 300) {
+          const response = JSON.parse(xhr.responseText);
+          const h1Element = document.getElementById('html');
+          h1Element.textContent = response ? 'Web Interface: Online' : 'Web Interface: Offline';
+          h1Element.style = response ? "color: #42f58d;" : "color: #ff2450;";
+          console.log(response)
+      } else {
+          console.error('Request failed with status:', xhr.status);
+      }
+  };
+  
+  xhr1.onerror = function () {
+      console.error('Request error');
+  };
+  
+  xhr1.send();
+</script>
+
+
+<body>
+  <center>
+      <h1>Shinji Web Interface</h1>
+      <br>
+      <br>
+      <h2 id="api" style="color: #ff2450;">API: Offline</h2>
+      <h2 id="html" style="color: #ff2450;">Web Interface: Offline</h2>
+      <br>
+      <br>
+      <h3 id="apiport" style="margin-top: 25%;">JSON API Port: ERROR</h3>
+      <h3 id="htmlport" style="margin-top: -20px;">Web Interface Port: ERROR</h3>
+  </center>
+</body>
+</html>
